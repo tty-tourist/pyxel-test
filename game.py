@@ -29,6 +29,7 @@ class App:
         self.bullet_x = -10
         self.bullet_y = 70
         self.bullet_left = True
+        self.direction_y = deque([0, 0, 0])
 
         self.dead = False
 
@@ -128,16 +129,18 @@ class App:
             self.points += 1
 
         direction_x = 1 if self.bullet_left else -1
-            
+
         self.bullet_x += direction_x
 
-        if self.bullet_y <= 50:
-            direction_y = 1
-        elif self.bullet_y >= 75:
-            direction_y = -1
-        else:
-            direction_y = pyxel.rndi(-1, 1)
-        self.bullet_y += direction_y
+        if not self.direction_y:
+            if self.bullet_y <= 50:
+                self.direction_y = deque([1, 1 , 1])
+            elif self.bullet_y >= 75:
+                self.direction_y = deque([-1, -1 , -1])
+            else:
+                self.direction_y = deque([pyxel.rndi(-1, 1)] * 3)
+
+        self.bullet_y += self.direction_y.pop()
 
     def intersects(self):
 
@@ -148,12 +151,10 @@ class App:
         me_bottom_left_x = self.me_x + 3
         me_bottom_left_y = self.me_y + BOXHEIGHT - 4
 
-
         bullet_top_right_x = self.bullet_x + 7
-        bullet_top_right_y = self.bullet_y 
-        bullet_bottom_left_x = self.bullet_x 
+        bullet_top_right_y = self.bullet_y
+        bullet_bottom_left_x = self.bullet_x
         bullet_bottom_left_y = self.bullet_y + 5
-
 
         if not (me_top_right_x < bullet_bottom_left_x or me_bottom_left_x > bullet_top_right_x or me_top_right_y > bullet_bottom_left_y or me_bottom_left_y < bullet_top_right_y):
             self.dead = True
