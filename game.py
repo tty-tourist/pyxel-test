@@ -1,5 +1,8 @@
 import pyxel
 from collections import deque
+import pickle
+
+
 
 JUMP = 30
 BOXHEIGHT = 16
@@ -9,12 +12,11 @@ JUMPING = deque([0, 0, 0, 0, 1, 1, 1, 1])
 WALK_L = deque([3, 4])
 WALK_R = deque([2, 0])
 
-
 class App:
     def __init__(self):
 
-        pyxel.init(80, 80, title="Test!", display_scale=2)
-        pyxel.load("res.pyxres")
+        pyxel.init(80, 80, title="Test!", display_scale=6)
+        pyxel.load("res/res.pyxres")
         self.reset()
         pyxel.run(self.update, self.draw)
 
@@ -44,6 +46,14 @@ class App:
         self.explosion_col = deque([8, 4, 10])
 
         self.points = 0
+        self.hs_saved = False
+
+        try:
+            with open('res/hs.pickle', 'rb') as handle:
+                self.highscore = pickle.load(handle)
+        except Exception as e:
+            self.highscore = 0
+            
 
     def update(self):
         if not self.dead:
@@ -55,6 +65,10 @@ class App:
             self.intersects()
         else:
             self.explosion()
+            if not self.hs_saved and self.points > self.highscore:
+                with open('res/hs.pickle', 'wb') as handle:
+                    pickle.dump(self.points, handle, protocol=pickle.HIGHEST_PROTOCOL)
+                    self.hs_saved = True
 
         if pyxel.btnp(pyxel.KEY_R):
             self.reset()
@@ -75,7 +89,11 @@ class App:
 
         self.bullet_draw()
 
-        pyxel.text(5, 5, str(self.points), 7)
+        score_string =  str(self.points) + ' / ' + str(self.highscore)
+        score_col = 10 if self.highscore < self.points else 7
+
+        # pyxel.text(6, 6, score_string, 13)
+        pyxel.text(5, 5, score_string, score_col)
 
         if self.dead:
             pyxel.text(22, 25, "GAME OVER!", 8)
