@@ -15,7 +15,7 @@ WALK_R = deque([2, 0])
 class App:
     def __init__(self):
 
-        pyxel.init(80, 80, title="Test!", display_scale=6)
+        pyxel.init(80, 80, title="Test!", display_scale=1)
         pyxel.load("res/res.pyxres")
         self.reset()
         pyxel.run(self.update, self.draw)
@@ -96,7 +96,7 @@ class App:
         pyxel.text(5, 5, score_string, score_col)
 
         if self.dead:
-            pyxel.text(22, 21, "GAME OVER!", 8)
+            pyxel.text(22, 21, "GAME OVER!!", 8)
             pyxel.circ(self.bullet['x'], self.bullet['y'], 7, self.explosion_col[0])
             pyxel.circ(self.bullet['x'], self.bullet['y'], 4, self.explosion_col[1])
             pyxel.circ(self.bullet['x'], self.bullet['y'], 2, self.explosion_col[2])
