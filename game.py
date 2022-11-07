@@ -96,11 +96,10 @@ class App:
         pyxel.text(5, 5, score_string, score_col)
 
         if self.dead:
-            pyxel.text(22, 25, "GAME OVER!", 8)
+            pyxel.text(22, 21, "GAME OVER!", 8)
             pyxel.circ(self.bullet['x'], self.bullet['y'], 7, self.explosion_col[0])
             pyxel.circ(self.bullet['x'], self.bullet['y'], 4, self.explosion_col[1])
             pyxel.circ(self.bullet['x'], self.bullet['y'], 2, self.explosion_col[2])
-
 
     def update_direction(self):
         if pyxel.btn(pyxel.KEY_LEFT) and self.me['x'] > 0:
