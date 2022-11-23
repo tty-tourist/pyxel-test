@@ -59,11 +59,14 @@ class App:
         else:
             self.explosion()
             if not self.hs_saved and self.points > self.highscore:
-                with open('res/hs.pickle', 'wb') as handle:
-                    pickle.dump(self.points,
-                                handle,
-                                protocol=pickle.HIGHEST_PROTOCOL)
-                    self.hs_saved = True
+                try:
+                    with open('res/hs.pickle', 'wb') as handle:
+                        pickle.dump(self.points,
+                                    handle,
+                                    protocol=pickle.HIGHEST_PROTOCOL)
+                        self.hs_saved = True
+                except Exception:
+                    pass
 
         if pyxel.btnp(pyxel.KEY_R):
             self.reset()
